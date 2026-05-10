@@ -11,8 +11,6 @@ import adminRouter from './routes/adminRoutes.js'
 import initSocket from './socket/socket.js'
 
 dotenv.config()
-console.log("ADMIN_EMAIL:", process.env.ADMIN_EMAIL)
-console.log("ADMIN_EMAIL:", process.env.ADMIN_PASSWORD) // ← add this
 
 connectDB()
 connectCloudinary()
@@ -26,7 +24,9 @@ const io = new Server(httpServer, {
 initSocket(io)
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://doc-book-nine.vercel.app/']
+  origin: ['http://localhost:5173',
+    'http://localhost:3000',
+    'https://doc-book-nine.vercel.app']
 }))
 app.use(express.json())
 
