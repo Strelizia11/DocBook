@@ -25,7 +25,9 @@ const io = new Server(httpServer, {
 
 initSocket(io)
 
-app.use(cors())
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://doc-book-nine.vercel.app/']
+}))
 app.use(express.json())
 
 app.use('/api/user', userRouter)
