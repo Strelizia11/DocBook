@@ -1,7 +1,54 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import validator from 'validator'
+import { v2 as cloudinary } from 'cloudinary'
 import doctorModel from '../models/doctorModel.js'
 import appointmentModel from '../models/appointmentModel.js'
+
+// Doctor self-registration (pending approval)
+const registerDoctor = async (req, res) => {
+  try {
+    const { name, email, password, speciality, degree, experience, about, fees, address } = req.body
+    const imageFile = req.file
+
+    if (!name || !email || !password || !speciality || !degree || !experience || !about || !fees)
+      return res.json({ success: false, message: 'Missing details' })
+
+    if (!validator.isEmail(email))
+      return res.json({ success: false, message: 'Enter a valid email' })
+
+    if (password.length < 8)
+      return res.json({ success: false, message: 'Password must be at least 8 characters' })
+
+    const exists = await doctorModel.findOne({ email })
+    if (exists) return res.json({ success: false, message: 'Email already registered' })
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    let imageUrl = 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg'
+    if (imageFile) {
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: 'image' })
+      imageUrl = imageUpload.secure_url
+    }
+
+    const doctorData = {
+      name, email,
+      password: hashedPassword,
+      image: imageUrl,
+      speciality, degree, experience, about,
+      fees: Number(fees),
+      address: address ? JSON.parse(address) : { line1: '', line2: '' },
+      approved: false,
+    }
+
+    const newDoctor = new doctorModel(doctorData)
+    await newDoctor.save()
+
+    res.json({ success: true, message: 'Application submitted. Wait for admin approval.' })
+  } catch (error) {
+    res.json({ success: false, message: error.message })
+  }
+}
 
 // Doctor login
 const loginDoctor = async (req, res) => {
@@ -41,7 +88,6 @@ const appointmentComplete = async (req, res) => {
     const { docId, appointmentId } = req.body
     const appointment = await appointmentModel.findById(appointmentId)
 
-    // FIX: use .toString() to compare ObjectId with string
     if (appointment.docId.toString() !== docId.toString())
       return res.json({ success: false, message: 'Unauthorized action' })
 
@@ -58,7 +104,6 @@ const appointmentCancel = async (req, res) => {
     const { docId, appointmentId } = req.body
     const appointment = await appointmentModel.findById(appointmentId)
 
-    // FIX: use .toString() to compare ObjectId with string
     if (appointment.docId.toString() !== docId.toString())
       return res.json({ success: false, message: 'Unauthorized action' })
 
@@ -133,4 +178,4 @@ const doctorDashboard = async (req, res) => {
   }
 }
 
-export { loginDoctor, appointmentsDoctor, appointmentComplete, appointmentCancel, doctorProfile, updateDoctorProfile, doctorList, doctorDashboard }
+export { registerDoctor, loginDoctor, appointmentsDoctor, appointmentComplete, appointmentCancel, doctorProfile, updateDoctorProfile, doctorList, doctorDashboard }
