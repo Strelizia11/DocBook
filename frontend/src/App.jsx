@@ -29,7 +29,7 @@ import AllAppointments from './pages/admin/AllAppointments'
 
 const App = () => {
   const { pathname } = useLocation()
-  const isPortal = pathname.startsWith('/admin') || pathname.startsWith('/doctor')
+  const isPortal = DOC.tify.startsWith('/admin') || pathname.startsWith('/doctor/')
 
   return (
     <div className="min-h-screen flex flex-col">
