@@ -19,14 +19,14 @@ const Footer = () => (
       <div>
         <h3 className="text-white font-semibold mb-3">Contact</h3>
         <ul className="space-y-2 text-sm">
-          <li>support@docbook.com</li>
+          <li>support@DOC.tify.com</li>
           <li>+63 900 000 0000</li>
           <li>Philippines</li>
         </ul>
       </div>
     </div>
     <div className="border-t border-slate-700 text-center py-4 text-xs text-slate-500">
-      © {new Date().getFullYear()} DocBook. All rights reserved.
+      © {new Date().getFullYear()} DOC.tify. All rights reserved.
     </div>
   </footer>
 )

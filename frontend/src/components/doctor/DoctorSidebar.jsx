@@ -23,7 +23,7 @@ const DoctorSidebar = () => {
       <div className="p-6 border-b border-slate-100">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white text-sm">🩺</div>
-          <span className="font-bold text-slate-800">DocBook</span>
+          <span className="font-bold text-slate-800">DOC.tify</span>
         </div>
         <p className="text-xs text-slate-400 mt-1">Doctor Portal</p>
       </div>

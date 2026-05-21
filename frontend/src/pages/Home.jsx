@@ -74,7 +74,7 @@ const Home = () => {
       <section className="bg-primary/5 border-t border-primary/10 py-16 px-4">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-slate-800 mb-3">Are you a doctor?</h2>
-          <p className="text-slate-500 mb-6">Join DocBook and manage your appointments digitally.</p>
+          <p className="text-slate-500 mb-6">Join DOC.tify and manage your appointments digitally.</p>
           <button onClick={() => navigate('/doctor/login')} className="bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-secondary transition-colors">
             Doctor Portal
           </button>

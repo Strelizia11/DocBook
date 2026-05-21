@@ -126,7 +126,7 @@ const Register = () => {
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-slate-800">Create account</h1>
-          <p className="text-slate-500 mt-2">Join DocBook as a patient or doctor</p>
+          <p className="text-slate-500 mt-2">Join DOC.tify as a patient or doctor</p>
         </div>
 
         {/* Role Toggle */}

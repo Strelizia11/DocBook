@@ -35,7 +35,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-slate-800">Welcome back</h1>
-          <p className="text-slate-500 mt-2">Sign in to your DocBook account</p>
+          <p className="text-slate-500 mt-2">Sign in to your DOC.tify account</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">

@@ -46,7 +46,7 @@ const AdminLogin = () => {
                 value={form.email}
                 onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                 required
-                placeholder="admin@docbook.ph"
+                placeholder="admin@DOC.tify.ph"
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-400"
               />
             </div>

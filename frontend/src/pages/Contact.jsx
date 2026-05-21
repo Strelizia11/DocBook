@@ -33,7 +33,7 @@ const Contact = () => {
               {[
                 { icon: '📍', label: 'Address', value: '123 Health Ave, Makati City, Metro Manila, Philippines' },
                 { icon: '📞', label: 'Phone', value: '+63 2 8123 4567' },
-                { icon: '✉️', label: 'Email', value: 'hello@docbook.ph' },
+                { icon: '✉️', label: 'Email', value: 'hello@DOC.tify.ph' },
                 { icon: '⏰', label: 'Support Hours', value: 'Mon–Fri, 8:00 AM – 6:00 PM' },
               ].map(c => (
                 <div key={c.label} className="flex gap-4">
@@ -51,8 +51,8 @@ const Contact = () => {
             <div className="mt-10 bg-primary/5 rounded-2xl p-6 border border-primary/10">
               <h3 className="font-semibold text-slate-800 mb-2">For Doctors</h3>
               <p className="text-slate-500 text-sm">
-                Interested in joining DocBook as a healthcare provider? Reach out to{' '}
-                <a href="mailto:doctors@docbook.ph" className="text-primary hover:underline">doctors@docbook.ph</a>
+                Interested in joining DOC.tify as a healthcare provider? Reach out to{' '}
+                <a href="mailto:doctors@DOC.tify.ph" className="text-primary hover:underline">doctors@DOC.tify.ph</a>
               </p>
             </div>
           </div>

@@ -21,7 +21,7 @@ const About = () => {
       {/* Hero */}
       <section className="bg-gradient-to-br from-primary to-secondary text-white py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">About DocBook</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">About DOC.tify</h1>
           <p className="text-blue-100 text-lg max-w-xl mx-auto">
             We're on a mission to make healthcare more accessible — connecting patients with trusted doctors across the Philippines.
           </p>
@@ -34,7 +34,7 @@ const About = () => {
           <div>
             <h2 className="text-2xl font-bold text-slate-800 mb-4">Our Mission</h2>
             <p className="text-slate-600 leading-relaxed mb-4">
-              DocBook was built to eliminate the friction between patients and healthcare. We believe that booking a doctor's appointment should be as simple as ordering food online.
+              DOC.tify was built to eliminate the friction between patients and healthcare. We believe that booking a doctor's appointment should be as simple as ordering food online.
             </p>
             <p className="text-slate-600 leading-relaxed">
               Founded by a team of healthcare and technology professionals, we partner with verified, licensed physicians to bring you a trusted platform where health comes first.
@@ -53,7 +53,7 @@ const About = () => {
       {/* Features */}
       <section className="bg-slate-50 py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-slate-800 mb-2 text-center">Why DocBook?</h2>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2 text-center">Why DOC.tify?</h2>
           <p className="text-slate-500 text-center mb-10">Everything you need for a seamless healthcare experience</p>
           <div className="grid sm:grid-cols-2 gap-6">
             {features.map(f => (
