@@ -45,7 +45,11 @@ const BookAppointment = () => {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-5xl mb-3">🔒</p>
+          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
           <p className="font-medium text-slate-800 mb-2">Login required</p>
           <button onClick={() => navigate('/login')} className="bg-primary text-white px-6 py-2 rounded-xl text-sm font-medium">
             Sign In
@@ -62,6 +66,7 @@ const BookAppointment = () => {
   )
 
   const bookedSlots = doctor.slots_booked?.[selectedDate ? formatDate(selectedDate) : ''] || []
+  const canConfirm = !!selectedDate && !!selectedTime && !loading
 
   const handleBook = async () => {
     if (!selectedDate || !selectedTime) {
@@ -97,19 +102,21 @@ const BookAppointment = () => {
         Back
       </button>
 
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Book Appointment</h1>
+      <h1 className="text-2xl text-slate-800 mb-6" style={{ fontWeight: 500 }}>Book Appointment</h1>
 
       <div className="grid md:grid-cols-3 gap-6">
         {/* Doctor info */}
         <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
-          <img src={doctor.image} alt={doctor.name} className="w-20 h-20 rounded-xl object-cover mb-4" />
-          <h2 className="font-bold text-slate-800 text-lg">{doctor.name}</h2>
-          <p className="text-primary text-sm font-medium">{doctor.speciality}</p>
-          <p className="text-slate-500 text-xs mt-0.5">{doctor.degree} · {doctor.experience}</p>
+          <div style={{ width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden', marginBottom: '16px' }}>
+            <img src={doctor.image} alt={doctor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <h2 className="text-slate-800 text-lg" style={{ fontWeight: 500 }}>{doctor.name}</h2>
+          <p className="text-primary text-sm" style={{ fontWeight: 500 }}>{doctor.speciality}</p>
+          <p className="text-slate-500 text-xs mt-0.5">{doctor.degree} &middot; {doctor.experience}</p>
           <hr className="my-4 border-slate-100" />
           <div className="flex items-center justify-between text-sm">
             <span className="text-slate-500">Consultation fee</span>
-            <span className="font-bold text-slate-800">₱{doctor.fees}</span>
+            <span className="text-slate-800" style={{ fontWeight: 700 }}>&#8369;{doctor.fees}</span>
           </div>
         </div>
 
@@ -117,7 +124,7 @@ const BookAppointment = () => {
         <div className="md:col-span-2 space-y-6">
           {/* Date row */}
           <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
-            <h3 className="font-semibold text-slate-700 mb-4">Select Date</h3>
+            <h3 className="text-slate-700 mb-4" style={{ fontWeight: 500 }}>Select Date</h3>
             <div className="flex gap-2 overflow-x-auto pb-1">
               {dates.map(d => {
                 const isSelected = selectedDate && formatDate(d) === formatDate(selectedDate)
@@ -127,11 +134,11 @@ const BookAppointment = () => {
                   <button
                     key={d.toDateString()}
                     onClick={() => { setSelectedDate(d); setSelectedTime(null) }}
-                    className={`flex-shrink-0 flex flex-col items-center px-4 py-3 rounded-xl border transition-all min-w-[64px] ${
-                      isSelected
-                        ? 'bg-primary border-primary text-white'
-                        : 'border-slate-200 text-slate-600 hover:border-primary hover:text-primary'
-                    }`}
+                    className="flex-shrink-0 flex flex-col items-center px-4 py-3 rounded-xl border transition-all min-w-[64px]"
+                    style={isSelected
+                      ? { background: '#0EA5E9', borderColor: '#0EA5E9', color: '#ffffff' }
+                      : { background: '#ffffff', borderColor: '#e2e8f0', color: '#475569' }
+                    }
                   >
                     <span className="text-xs font-medium">{dayNames[d.getDay()]}</span>
                     <span className="text-xl font-bold">{d.getDate()}</span>
@@ -144,7 +151,7 @@ const BookAppointment = () => {
 
           {/* Time slots */}
           <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
-            <h3 className="font-semibold text-slate-700 mb-4">Select Time</h3>
+            <h3 className="text-slate-700 mb-4" style={{ fontWeight: 500 }}>Select Time</h3>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {TIME_SLOTS.map(slot => {
                 const isBooked = bookedSlots.includes(slot)
@@ -154,13 +161,16 @@ const BookAppointment = () => {
                     key={slot}
                     disabled={isBooked}
                     onClick={() => setSelectedTime(slot)}
-                    className={`py-2 px-3 rounded-lg text-xs font-medium border transition-all ${
+                    className="py-2 px-3 rounded-lg text-xs font-medium border transition-all"
+                    style={
                       isBooked
-                        ? 'bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed line-through'
+                        ? { background: '#f8fafc', color: '#cbd5e1', borderColor: '#f1f5f9', cursor: 'not-allowed', textDecoration: 'line-through' }
                         : isSelected
-                          ? 'bg-primary text-white border-primary'
-                          : 'border-slate-200 text-slate-600 hover:border-primary hover:text-primary'
-                    }`}
+                          ? { background: '#0EA5E9', color: '#ffffff', borderColor: '#0EA5E9' }
+                          : { background: '#ffffff', color: '#475569', borderColor: '#e2e8f0' }
+                    }
+                    onMouseEnter={e => { if (!isBooked && !isSelected) e.currentTarget.style.background = '#EFF6FF' }}
+                    onMouseLeave={e => { if (!isBooked && !isSelected) e.currentTarget.style.background = '#ffffff' }}
                   >
                     {slot}
                   </button>
@@ -172,18 +182,22 @@ const BookAppointment = () => {
           {/* Summary */}
           {selectedDate && selectedTime && (
             <div className="bg-primary/5 border border-primary/20 rounded-2xl p-5">
-              <p className="text-sm font-medium text-slate-700 mb-1">Appointment Summary</p>
+              <p className="text-sm text-slate-700 mb-1" style={{ fontWeight: 500 }}>Appointment Summary</p>
               <p className="text-slate-600 text-sm">
                 {selectedDate.toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {selectedTime}
               </p>
-              <p className="text-slate-500 text-sm">Fee: <span className="font-semibold text-slate-700">₱{doctor.fees}</span></p>
+              <p className="text-slate-500 text-sm">Fee: <span className="text-slate-700" style={{ fontWeight: 600 }}>&#8369;{doctor.fees}</span></p>
             </div>
           )}
 
           <button
             onClick={handleBook}
-            disabled={!selectedDate || !selectedTime || loading}
-            className="w-full bg-primary text-white font-semibold py-3 rounded-xl hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!canConfirm}
+            className="w-full text-white font-semibold py-3 rounded-xl transition-colors"
+            style={canConfirm
+              ? { background: '#0EA5E9', cursor: 'pointer' }
+              : { background: '#CBD5E1', color: '#94A3B8', cursor: 'not-allowed' }
+            }
           >
             {loading ? 'Booking…' : 'Confirm Appointment'}
           </button>

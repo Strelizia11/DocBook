@@ -4,11 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#0ea5e9',
+        primary: '#0EA5E9',
         secondary: '#0284c7',
       },
       fontFamily: {
-        sans: ['Outfit', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'sans-serif'],
       },
     },
   },

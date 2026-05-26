@@ -4,6 +4,12 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { AppContext } from '../context/AppContext'
 
+const EditIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+  </svg>
+)
+
 const MyProfile = () => {
   const { token, backendUrl, userData, loadUserData } = useContext(AppContext)
   const navigate = useNavigate()
@@ -73,9 +79,13 @@ const MyProfile = () => {
 
   const previewUrl = imageFile ? URL.createObjectURL(imageFile) : userData.image
 
+  const displayValue = val => val
+    ? <span className="text-slate-800 text-sm">{val}</span>
+    : <span className="text-slate-400 text-sm italic">Not provided</span>
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-slate-800 mb-8">My Profile</h1>
+      <h1 className="text-2xl text-slate-800 mb-8" style={{ fontWeight: 500 }}>My Profile</h1>
 
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8">
         {/* Avatar */}
@@ -97,109 +107,133 @@ const MyProfile = () => {
             )}
           </div>
           <div>
-            <p className="font-semibold text-slate-800 text-lg">{userData.name}</p>
+            <p className="text-slate-800 text-lg" style={{ fontWeight: 500 }}>{userData.name}</p>
             <p className="text-slate-500 text-sm">{userData.email}</p>
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-5">
-          {[
-            { label: 'Full name', name: 'name', type: 'text' },
-            { label: 'Phone', name: 'phone', type: 'tel' },
-            { label: 'Date of Birth', name: 'dob', type: 'date' },
-          ].map(f => (
-            <div key={f.name}>
-              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">{f.label}</label>
+        {/* Personal Information */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Personal Information</h2>
+            {!editing && (
+              <button
+                onClick={() => setEditing(true)}
+                className="flex items-center gap-1.5 text-xs text-primary hover:text-secondary transition-colors"
+                style={{ fontWeight: 500 }}
+              >
+                <EditIcon /> Edit
+              </button>
+            )}
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-5">
+            {[
+              { label: 'Full Name', name: 'name', type: 'text' },
+              { label: 'Phone', name: 'phone', type: 'tel' },
+              { label: 'Date of Birth', name: 'dob', type: 'date' },
+            ].map(f => (
+              <div key={f.name}>
+                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wide mb-1.5">{f.label}</label>
+                {editing ? (
+                  <input
+                    type={f.type}
+                    name={f.name}
+                    value={form[f.name]}
+                    onChange={handleChange}
+                    className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                  />
+                ) : (
+                  <div className="py-2.5">{displayValue(userData[f.name])}</div>
+                )}
+              </div>
+            ))}
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 uppercase tracking-wide mb-1.5">Gender</label>
+              {editing ? (
+                <select
+                  name="gender"
+                  value={form.gender}
+                  onChange={handleChange}
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                >
+                  <option>Not Selected</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              ) : (
+                <div className="py-2.5">{displayValue(userData.gender && userData.gender !== 'Not Selected' ? userData.gender : null)}</div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Address */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Address</h2>
+            {!editing && (
+              <button
+                onClick={() => setEditing(true)}
+                className="flex items-center gap-1.5 text-xs text-primary hover:text-secondary transition-colors"
+                style={{ fontWeight: 500 }}
+              >
+                <EditIcon /> Edit
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-slate-400 uppercase tracking-wide mb-1.5">Address Line 1</label>
               {editing ? (
                 <input
-                  type={f.type}
-                  name={f.name}
-                  value={form[f.name]}
+                  type="text"
+                  name="line1"
+                  value={form.address.line1}
                   onChange={handleChange}
                   className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
                 />
               ) : (
-                <p className="text-slate-800 text-sm py-2.5">{userData[f.name] || <span className="text-slate-400">—</span>}</p>
+                <div className="py-2.5">{displayValue(userData.address?.line1)}</div>
               )}
             </div>
-          ))}
-
-          <div>
-            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Gender</label>
-            {editing ? (
-              <select
-                name="gender"
-                value={form.gender}
-                onChange={handleChange}
-                className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
-              >
-                <option>Not Selected</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-              </select>
-            ) : (
-              <p className="text-slate-800 text-sm py-2.5">{userData.gender || '—'}</p>
-            )}
-          </div>
-
-          <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Address Line 1</label>
-            {editing ? (
-              <input
-                type="text"
-                name="line1"
-                value={form.address.line1}
-                onChange={handleChange}
-                className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
-              />
-            ) : (
-              <p className="text-slate-800 text-sm py-2.5">{userData.address?.line1 || <span className="text-slate-400">—</span>}</p>
-            )}
-          </div>
-
-          <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Address Line 2</label>
-            {editing ? (
-              <input
-                type="text"
-                name="line2"
-                value={form.address.line2}
-                onChange={handleChange}
-                className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
-              />
-            ) : (
-              <p className="text-slate-800 text-sm py-2.5">{userData.address?.line2 || <span className="text-slate-400">—</span>}</p>
-            )}
+            <div>
+              <label className="block text-xs font-medium text-slate-400 uppercase tracking-wide mb-1.5">Address Line 2</label>
+              {editing ? (
+                <input
+                  type="text"
+                  name="line2"
+                  value={form.address.line2}
+                  onChange={handleChange}
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                />
+              ) : (
+                <div className="py-2.5">{displayValue(userData.address?.line2)}</div>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="flex gap-3 mt-8">
-          {editing ? (
-            <>
-              <button
-                onClick={handleSave}
-                disabled={loading}
-                className="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-secondary transition-colors disabled:opacity-60"
-              >
-                {loading ? 'Saving…' : 'Save Changes'}
-              </button>
-              <button
-                onClick={() => { setEditing(false); setImageFile(null) }}
-                className="border border-slate-200 text-slate-600 px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50"
-              >
-                Cancel
-              </button>
-            </>
-          ) : (
+        {editing && (
+          <div className="flex gap-3 mt-8">
             <button
-              onClick={() => setEditing(true)}
-              className="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-secondary transition-colors"
+              onClick={handleSave}
+              disabled={loading}
+              className="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-secondary transition-colors disabled:opacity-60"
             >
-              Edit Profile
+              {loading ? 'Saving…' : 'Save Changes'}
             </button>
-          )}
-        </div>
+            <button
+              onClick={() => { setEditing(false); setImageFile(null) }}
+              className="border border-slate-200 text-slate-600 px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -6,9 +6,9 @@ import { DoctorContext } from '../../context/DoctorContext'
 import DoctorSidebar from '../../components/doctor/DoctorSidebar'
 
 const STATUS_COLORS = {
-  pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-  confirmed: 'bg-blue-50 text-blue-700 border-blue-200',
-  completed: 'bg-green-50 text-green-700 border-green-200',
+  pending:   'bg-amber-50 text-amber-700 border-amber-200',
+  confirmed: 'bg-green-50 text-green-700 border-green-200',
+  completed: 'bg-blue-50 text-blue-700 border-blue-200',
   cancelled: 'bg-red-50 text-red-600 border-red-200',
 }
 
@@ -60,7 +60,7 @@ const DoctorAppointments = () => {
     <div className="flex min-h-screen bg-slate-50">
       <DoctorSidebar />
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold text-slate-800 mb-2">Appointments</h1>
+        <h1 className="text-2xl text-slate-800 mb-1" style={{ fontWeight: 500 }}>Appointments</h1>
         <p className="text-slate-500 mb-6">Manage your patient appointments</p>
 
         {/* Filter tabs */}
@@ -69,9 +69,11 @@ const DoctorAppointments = () => {
             <button
               key={s}
               onClick={() => setFilter(s)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize transition-all ${
-                filter === s ? 'bg-primary text-white' : 'bg-white border border-slate-200 text-slate-600 hover:border-primary hover:text-primary'
-              }`}
+              className="px-4 py-1.5 rounded-full text-sm capitalize transition-all"
+              style={filter === s
+                ? { background: '#0EA5E9', color: '#ffffff', fontWeight: 600 }
+                : { background: '#ffffff', border: '1px solid #e2e8f0', color: '#475569', fontWeight: 500 }
+              }
             >
               {s}
             </button>
@@ -84,69 +86,73 @@ const DoctorAppointments = () => {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 text-slate-400">
-            <p className="text-4xl mb-3">📅</p>
+            <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <svg className="w-7 h-7 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
             <p>No appointments found</p>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Patient</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Date & Time</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Amount</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Status</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {filtered.map(apt => (
-                  <tr key={apt._id} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-5 py-3">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={apt.userData?.image || `https://ui-avatars.com/api/?name=${apt.userData?.name}&background=e2e8f0`}
-                          alt=""
-                          className="w-9 h-9 rounded-full object-cover"
-                        />
-                        <div>
-                          <p className="text-sm font-medium text-slate-800">{apt.userData?.name}</p>
-                          <p className="text-xs text-slate-400">{apt.userData?.gender} · DOB: {apt.userData?.dob}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-5 py-3 text-sm text-slate-600">
-                      <p>{apt.slotDate?.replace(/_/g, '/')}</p>
-                      <p className="text-xs text-slate-400">{apt.slotTime}</p>
-                    </td>
-                    <td className="px-5 py-3 text-sm font-medium text-slate-700">₱{apt.amount}</td>
-                    <td className="px-5 py-3">
-                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full border capitalize ${STATUS_COLORS[apt.status] || STATUS_COLORS.pending}`}>
-                        {apt.status || 'pending'}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3">
-                      {(apt.status === 'pending' || apt.status === 'confirmed') && !apt.cancelled && (
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => updateStatus(apt._id, 'complete')}
-                            className="text-xs bg-green-50 text-green-700 px-3 py-1.5 rounded-lg hover:bg-green-100 transition-colors font-medium"
-                          >
-                            Complete
-                          </button>
-                          <button
-                            onClick={() => updateStatus(apt._id, 'cancel')}
-                            className="text-xs bg-red-50 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors font-medium"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-3">
+            {filtered.map(apt => (
+              <div
+                key={apt._id}
+                className="bg-white border border-slate-100 shadow-sm"
+                style={{ borderRadius: '12px', padding: '16px' }}
+              >
+                <div className="flex flex-wrap items-center gap-4">
+                  {/* Patient */}
+                  <div className="flex items-center gap-3 flex-1 min-w-[180px]">
+                    <img
+                      src={apt.userData?.image || `https://ui-avatars.com/api/?name=${apt.userData?.name}&background=e2e8f0`}
+                      alt=""
+                      className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                    />
+                    <div>
+                      <p className="text-sm text-slate-800" style={{ fontWeight: 500 }}>{apt.userData?.name}</p>
+                      <p className="text-xs text-slate-400">{apt.userData?.gender} &middot; {apt.userData?.dob}</p>
+                    </div>
+                  </div>
+
+                  {/* Date & time */}
+                  <div className="min-w-[120px]">
+                    <p className="text-sm text-slate-600">{apt.slotDate?.replace(/_/g, '/')}</p>
+                    <p className="text-xs text-slate-400">{apt.slotTime}</p>
+                  </div>
+
+                  {/* Amount */}
+                  <div className="min-w-[80px]">
+                    <p className="text-sm text-slate-700" style={{ fontWeight: 500 }}>&#8369;{apt.amount}</p>
+                  </div>
+
+                  {/* Status */}
+                  <span className={`text-xs font-medium px-3 py-1 rounded-full border capitalize ${STATUS_COLORS[apt.status] || STATUS_COLORS.pending}`}>
+                    {apt.status || 'pending'}
+                  </span>
+
+                  {/* Actions */}
+                  {(apt.status === 'pending' || apt.status === 'confirmed') && !apt.cancelled && (
+                    <div className="flex gap-2 ml-auto">
+                      <button
+                        onClick={() => updateStatus(apt._id, 'complete')}
+                        className="text-xs bg-green-50 text-green-700 px-3 py-1.5 rounded-lg hover:bg-green-100 transition-colors"
+                        style={{ fontWeight: 500 }}
+                      >
+                        Complete
+                      </button>
+                      <button
+                        onClick={() => updateStatus(apt._id, 'cancel')}
+                        className="text-xs bg-red-50 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors"
+                        style={{ fontWeight: 500 }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </main>
