@@ -2,8 +2,7 @@ import { useContext, useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
 import defaultAvatar from '../../assets/image.png'
-
-// then in the img tag:
+import logo from '../../assets/logo.png'
 
 
 const Navbar = () => {
@@ -33,8 +32,8 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-sm border-b border-slate-100 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link to="/" className="text-2xl font-bold text-primary">
-          Doc<span className="text-slate-700">Book</span>
+        <Link to="/">
+          <img src={logo} alt="Doc.tify" className="h-10 w-auto" />
         </Link>
 
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
